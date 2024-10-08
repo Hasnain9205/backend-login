@@ -6,11 +6,19 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
+const isValidPhoneNumber = (number) => {
+  const regex = /^01[3-9]\d{8}$/;
+  return regex.test(number);
+};
+
 exports.sendOTP = async (req, res) => {
   try {
     const { phoneNumber } = req.body;
     if (!phoneNumber) {
       return res.status(400).send({ message: "Phone number is required." });
+    }
+    if (!isValidPhoneNumber(phoneNumber)) {
+      return res.status(400).send({ message: "Invalid phone number format" });
     }
     const existingUser = await User.findOne({ phoneNumber });
     if (existingUser && existingUser.isVerified) {

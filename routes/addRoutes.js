@@ -7,13 +7,14 @@ const {
   like,
   favorite,
 } = require("../Controller/addsControllers");
+const authenticateToken = require("../middleware/authentication");
 const router = express.Router();
 
-router.post("/adds/added", createAdd);
-router.put("/adds/update", updateAdd);
+router.post("/adds/added", authenticateToken, createAdd);
+router.put("/adds/update", authenticateToken, updateAdd);
 router.get("/adds/getAdd", getAdds);
-router.post("/adds/comment/:id", comment);
-router.post("/adds/like/:id", like);
-router.post("/adds/favorite/:id", favorite);
+router.post("/adds/comment/:id", authenticateToken, comment);
+router.post("/adds/like/:id", authenticateToken, like);
+router.post("/adds/favorite/:id", authenticateToken, favorite);
 
 module.exports = router;
